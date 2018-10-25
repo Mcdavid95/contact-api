@@ -15,7 +15,7 @@ export default (sequelize, DataTypes) => {
   }, {});
   Contact.associate = (models) => {
     Contact.belongsTo(models.User, {
-      foreignKey: 'contactId',
+      foreignKey: 'userId',
       onDelete: 'CASCADE',
     });
   };
