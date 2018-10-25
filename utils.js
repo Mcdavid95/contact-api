@@ -78,103 +78,86 @@ export default {
     return next();
   },
   /**
-   * @method bookInput
+   * @method contactInput
    * @param {Object} req
    * @param {Object} res
    * @param {*} next
    * @returns {*} response
    */
-  bookInput(req, res, next) {
-    const { title } = req.body;
-    if (typeof (title) === 'undefined') {
+  contactInput(req, res, next) {
+    const { name } = req.body;
+    if (typeof (name) === 'undefined') {
       return res.status(401).json({
-        message: 'Title field must not be empty'
+        message: 'Name field must not be empty'
       });
     }
     return next();
   },
   /**
-  * @method ratingInput
+  * @method getOneContact
   * @param {Object} req
   * @param {Object} res
   * @param {*} next
   * @returns {*} response
   */
-  ratingInput(req, res, next) {
-    const { id } = req.params;
-    const { rating } = req.body;
-    if (typeof (id) === 'undefined') {
+  getOneContactInput(req, res, next) {
+    const { contactId } = req.params;
+    if (typeof (contactId) === 'undefined') {
       return res.status(401).json({
-        message: 'id must be provided in params not be empty: /book/:id/rate'
+        message: 'contactId must be provided in params not be empty: /contact/:contactId/'
       });
-    } if (isNaN(parseInt(id, 10))) {
+    } if (!validator.isNumeric(contactId)) {
       return res.status(401).json({
-        message: 'id should be a number'
-      });
-    } if (typeof (rating) === 'undefined') {
-      return res.status(401).json({
-        message: 'Rating field must not be empty'
+        message: 'contactId should be a number'
       });
     }
     return next();
   },
-  /**
-  * @method updateInput
-  * @param {Object} req
-  * @param {Object} res
-  * @param {*} next
-  * @returns {*} response
-  */
-  updateInput(req, res, next) {
-    const { title } = req.body;
-    const { id } = req.params;
-    if (typeof (id) === 'undefined') {
-      return res.status(401).json({
-        message: 'id must be provided in params not be empty: /book/:id/'
-      });
-    } if (isNaN(parseInt(id, 10))) {
-      return res.status(401).json({
-        message: 'id should be a number'
-      });
-    } if (typeof (title) === 'undefined') {
-      return res.status(401).json({
-        message: 'Title field must not be empty'
-      });
-    }
-    return next();
-  },
-  /**
-  * @method deleteInput
-  * @param {Object} req
-  * @param {Object} res
-  * @param {*} next
-  * @returns {*} response
-  */
-  deleteInput(req, res, next) {
-    const { id } = req.params;
-    if (typeof (id) === 'undefined') {
-      return res.status(401).json({
-        message: 'id must be provided in params not be empty: /book/:id/'
-      });
-    } if (isNaN(parseInt(id, 10))) {
-      return res.status(401).json({
-        message: 'id should be a number'
-      });
-    }
-    return next();
-  },
-  /**
-   *
-   * @param {Array} arr
-   * @returns {Float} average value of array contents
-   */
-  calcAverage(arr) {
-    let sum = 0;
-    arr.forEach((item) => {
-      sum += item;
-    });
-    return sum / arr.length;
-  },
+  // /**
+  // * @method updateInput
+  // * @param {Object} req
+  // * @param {Object} res
+  // * @param {*} next
+  // * @returns {*} response
+  // */
+  // updateInput(req, res, next) {
+  //   const { title } = req.body;
+  //   const { id } = req.params;
+  //   if (typeof (id) === 'undefined') {
+  //     return res.status(401).json({
+  //       message: 'id must be provided in params not be empty: /book/:id/'
+  //     });
+  //   } if (isNaN(parseInt(id, 10))) {
+  //     return res.status(401).json({
+  //       message: 'id should be a number'
+  //     });
+  //   } if (typeof (title) === 'undefined') {
+  //     return res.status(401).json({
+  //       message: 'Title field must not be empty'
+  //     });
+  //   }
+  //   return next();
+  // },
+  // /**
+  // * @method deleteInput
+  // * @param {Object} req
+  // * @param {Object} res
+  // * @param {*} next
+  // * @returns {*} response
+  // */
+  // deleteInput(req, res, next) {
+  //   const { id } = req.params;
+  //   if (typeof (id) === 'undefined') {
+  //     return res.status(401).json({
+  //       message: 'id must be provided in params not be empty: /book/:id/'
+  //     });
+  //   } if (isNaN(parseInt(id, 10))) {
+  //     return res.status(401).json({
+  //       message: 'id should be a number'
+  //     });
+  //   }
+  //   return next();
+  // },
   /**
    * @method hasToken
    * @param {*} req
@@ -200,5 +183,18 @@ export default {
         message: 'You have to be loggedin first'
       });
     }
+  },
+
+  handleServerError(response, error) {
+    const log = bunyan.createLogger({ name: 'myapp' });
+    log.error(error);
+    return response.status(500).send({
+      success: false,
+      message: 'Internal Server Error'
+    });
+  },
+
+  handleServerResponse(response, status, object) {
+    return response.status(status).send(object);
   }
 };
