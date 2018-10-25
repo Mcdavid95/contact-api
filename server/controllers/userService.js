@@ -3,7 +3,9 @@ import bcrypt from 'bcrypt';
 import models from '../models';
 import utils from '../../utils';
 
-const { createToken, logger } = utils;
+const {
+  createToken, handleServerError, handleServerResponse
+} = utils;
 
 
 dotenv.config();
@@ -29,10 +31,7 @@ export default {
         }
       });
       if (isEmail) {
-        return res.status(409).send({
-          sucsess: false,
-          message: 'Email already in use'
-        });
+        return handleServerResponse(res, 404, { sucsess: false, message: 'Email already in use' });
       }
       const hash = await bcrypt.hash(password, parseInt(saltRounds, 10));
       const newUser = await User.create({
@@ -40,17 +39,9 @@ export default {
         password: hash,
         email: email.trim().toLowerCase()
       });
-      return res.status(201).send({
-        token: createToken(newUser.id, newUser.username),
-        sucsess: true,
-        message: 'User succesfully created'
-      });
+      return handleServerResponse(res, 201, { token: createToken(newUser.id, newUser.username), sucsess: true, message: 'User succesfully created' });
     } catch (error) {
-      logger().error(error);
-      res.status(500).send({
-        sucsess: false,
-        message: 'Internal Server Error'
-      });
+      return handleServerError(res, error);
     }
   },
 
@@ -70,26 +61,17 @@ export default {
         { username: username.trim().toLowerCase() }
         });
       if (!user) {
-        return res.status(404).send({
-          message: 'Username not correct'
-        });
+        return handleServerResponse(res, 401, { message: 'Username not correct' });
       }
       if (!bcrypt.compareSync(password, user.password)) {
-        return res.status(401).send({
-          message: 'Incorrect password'
-        });
+        return handleServerResponse(res, 401, { message: 'Incorrect Password' });
       }
       return res.status(202).send({
         token: createToken(user.id, user.username),
         message: `Welcome back ${user.username}`
       });
     } catch (error) {
-      logger().error(error);
-      return res.status(500).send({
-        sucsess: false,
-        message: 'Internal Server Error',
-        error
-      });
+      return handleServerError(res, error);
     }
   }
 
