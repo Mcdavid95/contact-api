@@ -1,6 +1,7 @@
 import express from 'express';
 import logger from 'morgan';
 import { json, urlencoded } from 'body-parser';
+import userRoutes from './routes/user.routes';
 
 // Set up the express app
 const app = express();
@@ -11,6 +12,7 @@ app.use(logger('dev'));
 // Parse incoming requests data (https://github.com/expressjs/body-parser)
 app.use(json());
 app.use(urlencoded({ extended: false }));
+app.use('/api/user', userRoutes);
 
 // Setup a default catch-all route that sends back a welcome message in JSON format.
 app.get('*', (req, res) => res.status(200).send({

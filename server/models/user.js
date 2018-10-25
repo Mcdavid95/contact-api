@@ -16,7 +16,7 @@ export default (sequelize, DataTypes) => {
 
   User.associate = (models) => {
     User.hasMany(models.Contact, {
-      foreignKey: 'contactId',
+      foreignKey: 'userId',
       as: 'userContacts',
     });
   };

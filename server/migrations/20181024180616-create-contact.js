@@ -26,13 +26,13 @@ module.exports = {
       allowNull: false,
       type: Sequelize.DATE
     },
-    contactId: {
+    userId: {
       type: Sequelize.INTEGER,
       onDelete: 'CASCADE',
       references: {
         model: 'Users',
         key: 'id',
-        as: 'contactId',
+        as: 'userId',
       },
     },
   }),
