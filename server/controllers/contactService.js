@@ -1,5 +1,5 @@
 import models from '../models';
-import utils from '../../utils';
+import utils from '../utils';
 
 const { handleServerError, handleServerResponse } = utils;
 

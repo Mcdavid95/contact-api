@@ -1,5 +1,5 @@
 const http = require('http');
-import utils from '../utils';
+import utils from '../server/utils';
 const app = require('../index'); // The express app we just created
 const log = utils.logger;
 

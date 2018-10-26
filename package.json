@@ -7,6 +7,10 @@
   "description": "Node API to handle user contacts",
   "main": "index.js",
   "scripts": {
+    "build": "babel ./ -d build --ignore node_modules/ --presets=env --source-maps inline --copy-files",
+    "prebuild": "rm -rf build/*",
+    "start": "NODE_ENV=production node ./build/bin/www",
+    "prestart": "npm run build",
     "start:dev": "nodemon --exec babel-node ./bin/www",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
