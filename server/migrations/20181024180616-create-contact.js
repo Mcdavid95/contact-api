@@ -18,6 +18,10 @@ module.exports = {
       type: Sequelize.ARRAY(Sequelize.STRING),
       defaultValue: []
     },
+    isStarred: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: false
+    },
     createdAt: {
       allowNull: false,
       type: Sequelize.DATE
