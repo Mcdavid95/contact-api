@@ -8,12 +8,14 @@
   "main": "index.js",
   "scripts": {
     "db:migrate": "sequelize db:migrate",
+    "coverage-report": "cat ./coverage/lcov.info",
+    "test": "NODE_ENV=test npm run db:migrate && nyc --reporter=text --reporter=html --reporter=lcov mocha --compilers js:babel-core/register ./server/tests/** --timeout 35000 && npm run coverage-report",
+    "test-dev": "npm run db:migrate && nyc --reporter=text --reporter=html --reporter=lcov mocha --compilers js:babel-core/register ./server/tests/** --timeout 35000 && npm run coverage-report",
     "build": "babel ./ -d build --ignore node_modules/ --presets=env --source-maps inline --copy-files",
     "prebuild": "rm -rf build/*",
     "start": "NODE_ENV=production node ./build/bin/www",
     "prestart": "npm run build && npm run db:migrate",
-    "start:dev": "nodemon --exec babel-node ./bin/www",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start:dev": "nodemon --exec babel-node ./bin/www"
   },
   "repository": {
     "type": "git",
@@ -51,8 +53,11 @@
     "dotenv": "^6.1.0",
     "express": "^4.16.4",
     "jsonwebtoken": "^8.3.0",
+    "mocha": "^5.2.0",
+    "mocha-lcov-reporter": "^1.3.0",
     "morgan": "^1.9.1",
     "nodemailer": "^4.6.8",
+    "nyc": "^13.1.0",
     "pg": "^7.5.0",
     "pg-hstore": "^2.3.2",
     "sequelize": "^4.41.0",

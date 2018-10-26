@@ -242,13 +242,13 @@ export default {
   * @param {*} next
   * @returns {*} response
   */
- resetPasswordInput(req, res, next) {
-  const { passwordToken } = req.params;
-  if (typeof (passwordToken) === 'undefined') {
-    return res.status(401).json({
-      message: 'passwordToken must be provided in params not be empty: /user/reset-password/:passwordToken'
-    });
-  }
-  return next();
-},
+  resetPasswordInput(req, res, next) {
+    const { passwordToken } = req.params;
+    if (typeof (passwordToken) === 'undefined') {
+      return res.status(401).json({
+        message: 'passwordToken must be provided in params not be empty: /user/reset-password/:passwordToken'
+      });
+    }
+    return next();
+  },
 };
