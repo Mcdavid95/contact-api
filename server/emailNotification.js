@@ -1,5 +1,8 @@
 import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
+import utils from './utils';
+
+const log = utils.logger();
 
 dotenv.config();
 
@@ -95,7 +98,7 @@ export const handleResetPassword = (token, email, host) => {
 
   transporter.sendMail(mailOptions, (error) => {
     if (error) {
-      console.log(error);
+      log.error(error);
       return error;
     }
   });
