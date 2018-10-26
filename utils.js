@@ -113,51 +113,58 @@ export default {
     }
     return next();
   },
-  // /**
-  // * @method updateInput
-  // * @param {Object} req
-  // * @param {Object} res
-  // * @param {*} next
-  // * @returns {*} response
-  // */
-  // updateInput(req, res, next) {
-  //   const { title } = req.body;
-  //   const { id } = req.params;
-  //   if (typeof (id) === 'undefined') {
-  //     return res.status(401).json({
-  //       message: 'id must be provided in params not be empty: /book/:id/'
-  //     });
-  //   } if (isNaN(parseInt(id, 10))) {
-  //     return res.status(401).json({
-  //       message: 'id should be a number'
-  //     });
-  //   } if (typeof (title) === 'undefined') {
-  //     return res.status(401).json({
-  //       message: 'Title field must not be empty'
-  //     });
-  //   }
-  //   return next();
-  // },
-  // /**
-  // * @method deleteInput
-  // * @param {Object} req
-  // * @param {Object} res
-  // * @param {*} next
-  // * @returns {*} response
-  // */
-  // deleteInput(req, res, next) {
-  //   const { id } = req.params;
-  //   if (typeof (id) === 'undefined') {
-  //     return res.status(401).json({
-  //       message: 'id must be provided in params not be empty: /book/:id/'
-  //     });
-  //   } if (isNaN(parseInt(id, 10))) {
-  //     return res.status(401).json({
-  //       message: 'id should be a number'
-  //     });
-  //   }
-  //   return next();
-  // },
+  /**
+  * @method updateInput
+  * @param {Object} req
+  * @param {Object} res
+  * @param {*} next
+  * @returns {*} response
+  */
+  updateInput(req, res, next) {
+    const { name, email, phone } = req.body;
+    if (typeof (contactId) === 'undefined') {
+      return res.status(401).json({
+        message: 'contactId must be provided in params not be empty: /contact/:contactId/'
+      });
+    } if (!validator.isNumeric(req.params.contactId)) {
+      return res.status(401).json({
+        message: 'contactId should be a number'
+      });
+    } if (validator.isEmpty(name)) {
+      return res.status(401).json({
+        message: 'name field must not be empty'
+      });
+    } if (validator.isEmpty(email)) {
+      return res.status(401).json({
+        message: 'email field must not be empty'
+      });
+    } if (validator.isEmpty(phone)) {
+      return res.status(401).json({
+        message: 'phone field must not be empty'
+      });
+    }
+    return next();
+  },
+  /**
+  * @method deleteInput
+  * @param {Object} req
+  * @param {Object} res
+  * @param {*} next
+  * @returns {*} response
+  */
+  deleteInput(req, res, next) {
+    const { contactId } = req.params;
+    if (typeof (contactId) === 'undefined') {
+      return res.status(401).json({
+        message: 'contactId must be provided in params not be empty: /contact/:contactId/'
+      });
+    } if (!validator.isNumeric(req.params.contactId)) {
+      return res.status(401).json({
+        message: 'id should be a number'
+      });
+    }
+    return next();
+  },
   /**
    * @method hasToken
    * @param {*} req

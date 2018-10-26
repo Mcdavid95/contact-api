@@ -11,6 +11,10 @@ export default (sequelize, DataTypes) => {
     phone: {
       type: DataTypes.ARRAY(DataTypes.STRING),
       defaultValue: []
+    },
+    isStarred: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
     }
   }, {});
   Contact.associate = (models) => {
