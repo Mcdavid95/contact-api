@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import bcrypt from 'bcrypt';
 import models from '../models';
-import utils from '../../utils';
+import utils from '../utils';
 
 const {
   createToken, handleServerError, handleServerResponse

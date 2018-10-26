@@ -1,6 +1,6 @@
 import express from 'express';
 import UserService from '../server/controllers/userService';
-import utils from '../utils';
+import utils from '../server/utils';
 
 const router = express.Router();
 const { signupInput, signInInput } = utils;
