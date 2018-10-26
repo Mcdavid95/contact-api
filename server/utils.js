@@ -191,7 +191,12 @@ export default {
       });
     }
   },
-
+  /**
+   *
+   * @param {*} response response object from server
+   * @param {*} error error message
+   * @returns {*} error response
+   */
   handleServerError(response, error) {
     const log = bunyan.createLogger({ name: 'myapp' });
     log.error(error);
@@ -200,8 +205,50 @@ export default {
       message: 'Internal Server Error'
     });
   },
-
+  /**
+   *
+   * @param {*} response response object from server
+   * @param {*} status error message
+   * @param {*} object meta-data
+   * @returns {*} error response
+   */
   handleServerResponse(response, status, object) {
     return response.status(status).send(object);
+  },
+  /**
+  * @method forgotPasswordInput
+  * @param {Object} req
+  * @param {Object} res
+  * @param {*} next
+  * @returns {*} response
+  */
+  forgotPasswordInput(req, res, next) {
+    const { email } = req.body;
+    if (validator.isEmpty(email)) {
+      return res.status(401).send({
+        message: 'Email field must not be empty'
+      });
+    } if (!validator.isEmail(email)) {
+      return res.status(401).send({
+        message: 'Please put in a proper email address'
+      });
+    }
+    return next();
+  },
+  /**
+  * @method resetPasswordInput
+  * @param {Object} req
+  * @param {Object} res
+  * @param {*} next
+  * @returns {*} response
+  */
+ resetPasswordInput(req, res, next) {
+  const { passwordToken } = req.params;
+  if (typeof (passwordToken) === 'undefined') {
+    return res.status(401).json({
+      message: 'passwordToken must be provided in params not be empty: /user/reset-password/:passwordToken'
+    });
   }
+  return next();
+},
 };

@@ -1,7 +1,9 @@
 import dotenv from 'dotenv';
 import bcrypt from 'bcrypt';
+import crypto from 'crypto';
 import models from '../models';
 import utils from '../utils';
+import { handleResetPassword, sendSuccessfulResetMail } from '../emailNotification';
 
 const {
   createToken, handleServerError, handleServerResponse
@@ -73,6 +75,67 @@ export default {
     } catch (error) {
       return handleServerError(res, error);
     }
-  }
+  },
 
+  /**
+   * @method forgotPassword
+   * @param { object } req
+   * @param { object } res
+   * @returns { object } returns the object containing response and reset password token
+   * @description recieves user email and creates password token i the database
+   */
+  async forgotPassword(req, res) {
+    try {
+      const { email } = req.body;
+      const user = await User.findOne({ where: { email } });
+      if (user) {
+        const token = crypto.randomBytes(20).toString('hex');
+        await user.update({ passwordToken: token, expiryTime: Date.now() + 3600000 }, {
+          where: {
+            email: req.body.email
+          }
+        });
+        handleResetPassword(token, email, req.headers.host);
+        return handleServerResponse(res, 200, { success: true, resetPasswordToken: token });
+      }
+      return handleServerResponse(res, 404, { success: false, message: 'Email is not associated with a known account' });
+    } catch (error) {
+      handleServerError(res, error);
+    }
+  },
+
+  /**
+   * @method resetPassword
+   * @param { object } req
+   * @param { object } res
+   * @returns { object } returns the object containing response and reset password token
+   * @description recieves new password details and updates user password in the database User table
+   */
+  async resetPassword(req, res) {
+    const { passwordToken } = req.params;
+    const { newPassword } = req.body;
+    try {
+      const user = await User.findOne({ where: { passwordToken } });
+      if (user) {
+        if (Date.now() < user.expiryTime) {
+          const updatedUser = await user.update({
+            password: bcrypt.hashSync(newPassword, 10),
+            resetPasswordToken: null,
+            expiryTime: null
+          });
+          sendSuccessfulResetMail(updatedUser.email);
+          return handleServerResponse(res, 200, { success: true, message: 'password successfully updated' });
+        }
+        await user.update({ resetPasswordToken: null, expiryTime: null }, {
+          where: {
+            resetPasswordToken: passwordToken
+          }
+        });
+        return handleServerResponse(res, 409, { success: false, message: 'Link expired' });
+      }
+      return handleServerResponse(res, 409, { success: false, message: 'Invalid Token' });
+    } catch (error) {
+      handleServerError(res, error);
+    }
+  }
 };

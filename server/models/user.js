@@ -12,6 +12,14 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
+    passwordToken: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    expiryTime: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
   }, {});
 
   User.associate = (models) => {
