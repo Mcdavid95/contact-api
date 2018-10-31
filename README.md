@@ -27,27 +27,46 @@ Contacts-API is a simole API to help users manage phone contacts.
 - Create Contacts
    - `POST: /api/contact`
    - Body: `STRING: name`, `ARRAY[STRING]: email`, `ARRAY[STRING]: phone`
+   - Header: `x-access-token`: JWT Token
    
 - Read Contact
    - `GET: /api/contact/:id`
+   - Header: `x-access-token`: JWT Token
    
 - Get all Contacts
    - `GET: /api/contact`
+   - Header: `x-access-token`: JWT Token
+   - Header: `x-access-token`: JWT Token
+   - Header: `x-access-token`: JWT Token
    
 - Edit Contact:
    - `PATCH: /api/contact/:id`
    - Body: `STRING: name`, `STRING: email`, `STRING: phone`
+   - Header: `x-access-token`: JWT Token
+   - Header: `x-access-token`: JWT Token
    
 - Delete Contact
    - `DELETE: /api/contact/:id`
+   - Header: `x-access-token`: JWT Token
    
 - Forgot Password
    - `PATCH: /api/user/forgot-password`
    - Body: `STRING: email`
+   - Header: `x-access-token`: JWT Token
+   - Header: `x-access-token`: JWT Token
    
 - Reset Password
    - `PATCH: /api/user/reset-password/:passwordToken`
    - Body: `STRING: newPassword`
+   - Header: `x-access-token`: JWT Token
+   
+- Star Contact
+   - `PATCH: /api/contact/contactId/star`
+   - Header: `x-access-token`: JWT Token
+   
+- Get Starred Contact
+   - `GET: /api/contact/star
+   - Header: `x-access-token`: JWT Token
    
 ## Test
 - `npm run test-dev`
