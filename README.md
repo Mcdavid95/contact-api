@@ -4,6 +4,9 @@
 ## Description
 Contacts-API is a simole API to help users manage phone contacts.
 
+## Contributors
+- Mcdavid Emereuwa
+
 ## Features
 - User Signup
 - User Sigin
